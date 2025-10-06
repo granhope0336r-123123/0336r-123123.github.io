@@ -731,7 +731,8 @@
     <!-- Hidden form for Netlify submission -->
    
 
-    <form name="order-form" netlify netlify-honeypot="bot-field" hidden>
+    <form name="order-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="order-form" />
   <input type="text" name="order-details" />
 </form>
     <script>
@@ -1125,7 +1126,10 @@
         function getFormData(screenId) {
             const screen = document.getElementById(screenId);
             const productSelect = screen.querySelector('select');
-            const inputs = Object.fromEntries([...screen.querySelectorAll('input[type="text"], input[type="number"]')].map(i => [i.id, i.value]));
+            const inputs = Object.fromEntries(
+                [...screen.querySelectorAll('input[type="text"], input[type="number"]')]
+                  .map(i => [i.id, i.value])
+              );
             const remarks = screen.querySelector('textarea').value;
             
             const classQuantities = {};
@@ -1380,6 +1384,7 @@ function sendOrderEmail(orderDataArray) {
     // ★重要：Netlifyが自動で処理できるように、headersは含めません
     fetch('/', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData).toString()
     })
     .then(() => {
