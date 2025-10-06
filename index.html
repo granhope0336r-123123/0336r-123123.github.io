@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>トップメニュー - Web発注システム</title>
+    <!-- Tailwind CSSを読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Interフォントを適用 */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* スクロールバーのスタイル（任意） */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* 点滅アニメーション */
+        @keyframes blink-red {
+            50% {
+                border-color: #ef4444; /* Tailwind red-500 */
+            }
+        }
+        .is-invalid {
+            animation: blink-red 1.5s step-end infinite;
+        }
+        /* 赤色のプレースホルダー */
+        .placeholder-red::placeholder {
+            color: #ef4444; /* Tailwind red-500 */
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- メインメニュー画面 -->
+    <div id="main-screen" class="max-w-sm mx-auto bg-white shadow-lg min-h-screen">
+        <!-- ヘッダーエリア -->
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center">
+            <h1 class="text-lg font-bold">トップメニュー</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6">
+            <!-- ユーザー挨拶 -->
+            <div class="mb-8 text-center">
+                <p class="text-gray-600 text-2xl">グランホープカメヤ教材発注フォーム</p></div>
+
+            <!-- ナビゲーションメニュー -->
+            <nav class="space-y-4">
+                <button id="new-order-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">
+                    新規注文
+                </button>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">
+                    注文履歴
+                </a>
+                <button id="cart-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">
+                    カート
+                </button>
+</nav>
+            <section aria-labelledby="notice-title" class="mt-8 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                <h3 id="notice-title" class="text-base font-semibold text-gray-800 mb-2">お知らせ</h3>
+                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    <li>現在お知らせはありません。</li>
+                
+                    <li><a href="8a3fe972-7ca0-49d8-95ca-6d5deba6fb7f.pdf" download="発達支援用品_大特価_20251007.pdf">2025.10.7発達支援用品大特価中</a></li>
+                    <li><a href="https://educe-web.craypas.co.jp/front/assets/a-blog/upload/download/25_%E3%81%8A%E3%82%84%E3%81%A4%E3%82%AB%E3%82%BF%E3%83%AD%E3%82%B0.pdf">2025.10.07プチエデュースおやつ用品大特価！</a></li></ul>
+            </section>
+
+        </main>
+
+        <!-- フッター -->
+        <footer class="text-center p-6 mt-auto">
+            <p class="text-xs text-gray-500">© A.A.C.2025 - AOKSW_ORDER 000.001.036</p>
+        </footer>
+    </div>
+
+    <!-- 学年選択画面 (初期状態は非表示) -->
+    <div id="grade-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-between items-center">
+            <div class="w-6"></div> <!-- 空のdivで中央寄せを維持 -->
+            <h1 class="text-lg font-bold">新規</h1>
+            <div class="flex items-center space-x-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div class="space-y-4" id="grade-buttons">
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">1年</a>
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">2年</a>
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">3年</a>
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">4年</a>
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">5年</a>
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">6年</a>
+                <a href="#" class="grade-button block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">指定なし</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6">
+            <button id="cancel-button-grade" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+
+    <!-- 商品カテゴリ選択画面 (初期状態は非表示) -->
+    <div id="category-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">商品分類</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div id="category-buttons" class="space-y-4">
+                <a href="#" id="test-category-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">テスト</a>
+                <a href="#" id="test-top-bottom-category-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">テスト・上下刊</a>
+                <a href="#" id="drill-work-category-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">ドリル・ワーク類</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">ノート・シール</a>
+                <a href="#" id="teaching-materials-category-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">教材・教具</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">そのほか</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">※上記以外</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6 space-y-4">
+            <button id="back-to-grade-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                戻る
+            </button>
+            <button id="cancel-button-category" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+    
+    <!-- 出版社選択画面 (テスト) (初期状態は非表示) -->
+    <div id="publisher-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">テスト</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div class="space-y-4">
+                <a href="#" class="bunkeido-button block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">文溪堂</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">日本標準</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">青葉出版</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">光村教育図書</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6 space-y-4">
+            <button id="back-to-category-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                戻る
+            </button>
+            <button id="cancel-button-publisher" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+
+    <!-- 出版社選択画面 (テスト・上下刊) (初期状態は非表示) -->
+    <div id="publisher-top-bottom-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">テスト・上下刊</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div class="space-y-4">
+                <a href="#" class="bunkeido-button block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">文溪堂</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">日本標準</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">青葉出版</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">光村教育図書</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6 space-y-4">
+            <button id="back-to-category-button-tb" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                戻る
+            </button>
+            <button id="cancel-button-publisher-tb" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+
+    <!-- 出版社選択画面 (ドリル・ワーク類) (初期状態は非表示) -->
+    <div id="publisher-drill-work-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">ドリル・ワーク類</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div class="space-y-4">
+                <a href="#" class="bunkeido-button block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">文溪堂</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">日本標準</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">青葉出版</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">光村教育図書</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6 space-y-4">
+            <button id="back-to-category-button-dw" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                戻る
+            </button>
+            <button id="cancel-button-publisher-dw" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+
+    <!-- 教科選択画面 (初期状態は非表示) -->
+    <div id="subject-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">文溪堂</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div class="space-y-4">
+                <a href="#" id="kokugo-subject-button" class="block w-full text-center py-3 px-4 bg-red-100 text-black border border-red-200 rounded-lg shadow-sm font-semibold transition hover:bg-red-200">国語</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-blue-100 text-black border border-blue-200 rounded-lg shadow-sm font-semibold transition hover:bg-blue-200">算数</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6 space-y-4">
+            <button id="back-to-publisher-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                戻る
+            </button>
+            <button id="cancel-button-subject" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+    
+    <!-- 商品選択画面 (国語) (初期状態は非表示) -->
+    <div id="product-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">国語</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+            <form id="product-form">               
+            <input type="hidden" id="editing-cart-item-id" value="">
+                <div class="mb-8 text-center">
+                    <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+                </div>
+                
+                <div class="space-y-5">
+                    <!-- 商品選択プルダウン -->
+                    <div>
+                        <label for="product-select" class="block text-sm font-medium text-gray-700">商品選択</label>
+                        <select id="product-select" class="mt-1 block w-full py-3 px-4 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="">-- 商品を選択してください --</option>
+                            <option value="item1">(文溪)国語テスト A 1学期</option>
+                            <option value="item2">(文溪)国語テスト A 2学期</option>
+                            <option value="item3">(文溪)国語テスト A 3学期</option>
+                            <option value="item4">(文溪)国語テスト B 1学期</option>
+                            <option value="item5">(文溪)国語テスト B 2学期</option>
+                            <option value="item6">(文溪)国語テスト B 3学期</option>
+                            <option value="item7">(文溪)国語テスト N 1学期</option>
+                            <option value="item8">(文溪)国語テスト N 2学期</option>
+                            <option value="item9">(文溪)国語テスト N 3学期</option>
+                            <option value="item10">(文溪)国語テスト NB 1学期</option>
+                            <option value="item11">(文溪)国語テスト NB 2学期</option>
+                            <option value="item12">(文溪)国語テスト NB 3学期</option>
+                            <option value="item13">(文溪)国語テスト C 1学期</option>
+                            <option value="item14">(文溪)国語テスト C 2学期</option>
+                            <option value="item15">(文溪)国語テスト C 3学期</option>
+                            <option value="item16">(文溪)国語テスト Aﾌﾟﾗｽ 1学期</option>
+                            <option value="item17">(文溪)国語テスト Aﾌﾟﾗｽ 2学期</option>
+                            <option value="item18">(文溪)国語テスト Aﾌﾟﾗｽ 3学期</option>
+                            <option value="item19">(文溪)国語テスト AﾌﾟﾗｽB 1学期</option>
+                            <option value="item20">(文溪)国語テスト AﾌﾟﾗｽB 2学期</option>
+                            <option value="item21">(文溪)国語テスト AﾌﾟﾗｽB 3学期</option>
+                            <option value="item22">(文溪)国語テスト Nﾌﾟﾗｽ 1学期</option>
+                            <option value="item23">(文溪)国語テスト Nﾌﾟﾗｽ 2学期</option>
+                            <option value="item24">(文溪)国語テスト Nﾌﾟﾗｽ 3学期</option>
+                            <option value="item25">(文溪)国語テスト NﾌﾟﾗｽB 1学期</option>
+                            <option value="item26">(文溪)国語テスト NﾌﾟﾗｽB 2学期</option>
+                            <option value="item27">(文溪)国語テスト NﾌﾟﾗｽB 3学期</option>
+                            <option value="item28">(文溪)国語テスト AG 1学期</option>
+                            <option value="item29">(文溪)国語テスト AG 2学期</option>
+                            <option value="item30">(文溪)国語テスト AG 3学期</option>
+                            <option value="item31">(文溪)国語テスト BG 1学期</option>
+                            <option value="item32">(文溪)国語テスト BG 2学期</option>
+                            <option value="item33">(文溪)国語テスト BG 3学期</option>
+                        </select>
+                    </div>
+
+                    <!-- 入力フォーム -->
+                    <div>
+                        <label for="school-name" class="block text-sm font-medium text-gray-700">学校名</label>
+                        <input type="text" id="school-name" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：〇〇小学校" data-placeholder="例：〇〇小学校">
+                    </div>
+                    <div>
+                        <label for="grade" class="block text-sm font-medium text-gray-700">学年</label>
+                        <input type="text" id="grade" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：１" data-placeholder="例：１">
+                    </div>
+                    <div>
+                        <label for="teacher-name" class="block text-sm font-medium text-gray-700">ご担当者氏名</label>
+                        <input type="text" id="teacher-name" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：グラン太郎" data-placeholder="例：グラン太郎">
+                    </div>
+                     <div>
+                        <label for="total-quantity" class="block text-sm font-medium text-gray-700">個数</label>
+                        <input type="number" id="total-quantity" min="0" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：100" data-placeholder="例：100">
+                    </div>
+
+                    <!-- 組ごとの個数入力 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">組ごとの内訳</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center">
+                               <label for="class1-qty" class="block text-sm font-medium text-gray-700 mb-1">1組</label>
+                               <input type="number" id="class1-qty" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                            <div class="text-center">
+                               <label for="class2-qty" class="block text-sm font-medium text-gray-700 mb-1">2組</label>
+                               <input type="number" id="class2-qty" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                            <div class="text-center">
+                               <label for="class3-qty" class="block text-sm font-medium text-gray-700 mb-1">3組</label>
+                               <input type="number" id="class3-qty" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                            <div class="text-center">
+                               <label for="class4-qty" class="block text-sm font-medium text-gray-700 mb-1">4組</label>
+                               <input type="number" id="class4-qty" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                             <div class="text-center">
+                               <label for="class5-qty" class="block text-sm font-medium text-gray-700 mb-1">5組</label>
+                               <input type="number" id="class5-qty" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                             <div class="text-center">
+                               <label for="class6-qty" class="block text-sm font-medium text-gray-700 mb-1">6組</label>
+                               <input type="number" id="class6-qty" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 備考 -->
+                    <div>
+                        <label for="remarks" class="block text-sm font-medium text-gray-700">備考</label>
+                        <textarea id="remarks" rows="4" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4"></textarea>
+                    </div>
+                </div>
+            </form>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-4 mt-auto bg-white border-t space-y-2">
+             <!-- 警告メッセージ -->
+            <p id="error-message" class="text-red-600 text-sm hidden font-semibold text-center">※必須入力事項です</p>
+            <button id="add-to-cart-button" class="block w-full text-center py-3 px-4 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 transition font-semibold">
+                カートに追加
+            </button>
+             <div class="flex space-x-2">
+                <button id="back-to-subject-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                    戻る
+                </button>
+                <button id="cancel-button-product" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                    キャンセル
+                </button>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 教材・教具 科目選択画面 (初期状態は非表示) -->
+    <div id="teaching-materials-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">教材・教具</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+             <div class="mb-8 text-center">
+                <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
+            </div>
+            <div class="space-y-4">
+                <a href="#" id="zukou-tm-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">図工</a>
+                <a href="#" id="rika-tm-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">理科</a>
+                <a href="#" id="seikatsuka-tm-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">生活科</a>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-6 space-y-4">
+            <button id="back-to-category-from-tm-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                戻る
+            </button>
+            <button id="cancel-from-tm-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                キャンセル
+            </button>
+        </footer>
+    </div>
+
+    <!-- メーカー選択画面 (図工) (初期状態は非表示) -->
+    <div id="manufacturer-selection-zukou-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">図工</h1></header>
+        <main class="p-6 flex-grow">
+            <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
+            <div class="space-y-4">
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">文溪堂</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">アーテック</a>
+                <a href="#" class="crafterio-button block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">クラフテリオ</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">昭和教材</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">大和科学</a>
+            </div>
+        </main>
+        <footer class="p-6 space-y-4">
+            <button id="back-to-tm-from-zukou-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">戻る</button>
+            <button id="cancel-from-zukou-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">キャンセル</button>
+        </footer>
+    </div>
+    
+    <!-- メーカー選択画面 (理科) (初期状態は非表示) -->
+    <div id="manufacturer-selection-rika-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">理科</h1></header>
+        <main class="p-6 flex-grow">
+            <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
+            <div class="space-y-4">
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">文溪堂</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">アーテック</a>
+                <a href="#" class="crafterio-button block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">クラフテリオ</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">昭和教材</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">大和科学</a>
+            </div>
+        </main>
+        <footer class="p-6 space-y-4">
+            <button id="back-to-tm-from-rika-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">戻る</button>
+            <button id="cancel-from-rika-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">キャンセル</button>
+        </footer>
+    </div>
+    
+    <!-- メーカー選択画面 (生活科) (初期状態は非表示) -->
+    <div id="manufacturer-selection-seikatsuka-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">生活科</h1></header>
+        <main class="p-6 flex-grow">
+            <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
+            <div class="space-y-4">
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">文溪堂</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">アーテック</a>
+                <a href="#" class="crafterio-button block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">クラフテリオ</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">昭和教材</a>
+                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">大和科学</a>
+            </div>
+        </main>
+        <footer class="p-6 space-y-4">
+            <button id="back-to-tm-from-seikatsuka-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">戻る</button>
+            <button id="cancel-from-seikatsuka-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">キャンセル</button>
+        </footer>
+    </div>
+    
+    <!-- クラフテリオ 商品カテゴリ選択画面 (初期状態は非表示) -->
+    <div id="crafterio-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">クラフテリオ</h1></header>
+        <main class="p-6 flex-grow">
+           <form id="product-form">
+                <input type="hidden" id="editing-cart-item-id-crafterio" value="">
+                <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
+                <div class="space-y-5">
+                    <!-- 商品選択プルダウン -->
+                    <div>
+                        <label for="product-select-crafterio" class="block text-sm font-medium text-gray-700">商品選択</label>
+                        <select id="product-select-crafterio" name="product" class="mt-1 block w-full py-3 px-4 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="">-- 商品を選択してください --</option>
+                            <option value="craft-item1">クラフテリオ商品A</option>
+                            <option value="craft-item2">クラフテリオ商品B</option>
+                            <option value="craft-item3">クラフテリオ商品C</option>
+                        </select>
+                    </div>
+
+                    <!-- 入力フォーム -->
+                    <div>
+                        <label for="school-name-crafterio" class="block text-sm font-medium text-gray-700">学校名</label>
+                        <input type="text" id="school-name-crafterio" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：〇〇小学校" data-placeholder="例：〇〇小学校">
+                    </div>
+                    <div>
+                        <label for="grade-crafterio" class="block text-sm font-medium text-gray-700">学年</label>
+                        <input type="text" id="grade-crafterio" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：１" data-placeholder="例：１">
+                    </div>
+                    <div>
+                        <label for="teacher-name-crafterio" class="block text-sm font-medium text-gray-700">ご担当者氏名</label>
+                        <input type="text" id="teacher-name-crafterio" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：グラン太郎" data-placeholder="例：グラン太郎">
+                    </div>
+                     <div>
+                        <label for="total-quantity-crafterio" class="block text-sm font-medium text-gray-700">個数</label>
+                        <input type="number" id="total-quantity-crafterio" min="0" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4" placeholder="例：100" data-placeholder="例：100">
+                    </div>
+
+                    <!-- 組ごとの個数入力 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">組ごとの内訳</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center">
+                               <label for="class1-qty-crafterio" class="block text-sm font-medium text-gray-700 mb-1">1組</label>
+                               <input type="number" id="class1-qty-crafterio" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                            <div class="text-center">
+                               <label for="class2-qty-crafterio" class="block text-sm font-medium text-gray-700 mb-1">2組</label>
+                               <input type="number" id="class2-qty-crafterio" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                            <div class="text-center">
+                               <label for="class3-qty-crafterio" class="block text-sm font-medium text-gray-700 mb-1">3組</label>
+                               <input type="number" id="class3-qty-crafterio" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                            <div class="text-center">
+                               <label for="class4-qty-crafterio" class="block text-sm font-medium text-gray-700 mb-1">4組</label>
+                               <input type="number" id="class4-qty-crafterio" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                             <div class="text-center">
+                               <label for="class5-qty-crafterio" class="block text-sm font-medium text-gray-700 mb-1">5組</label>
+                               <input type="number" id="class5-qty-crafterio" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                             <div class="text-center">
+                               <label for="class6-qty-crafterio" class="block text-sm font-medium text-gray-700 mb-1">6組</label>
+                               <input type="number" id="class6-qty-crafterio" min="0" class="w-full text-center border-gray-400 rounded-md shadow-sm p-3">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 備考 -->
+                    <div>
+                        <label for="remarks-crafterio" class="block text-sm font-medium text-gray-700">備考</label>
+                        <textarea id="remarks-crafterio" rows="4" class="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-3 px-4"></textarea>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <footer class="p-4 mt-auto bg-white border-t space-y-2">
+            <p id="error-message-crafterio" class="text-red-600 text-sm hidden font-semibold text-center">※必須入力事項です</p>
+            <button id="add-to-cart-button-crafterio" class="block w-full text-center py-3 px-4 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 transition font-semibold">カートに追加</button>
+            <div class="flex space-x-2">
+                <button id="back-to-manufacturer-from-crafterio-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">戻る</button>
+                <button id="cancel-from-crafterio-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">キャンセル</button>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- カート確認画面 (初期状態は非表示) -->
+    <div id="cart-confirmation-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダーエリア -->
+         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">カート</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow">
+            <div class="text-center mb-8">
+                <div class="inline-block bg-green-100 rounded-full p-3">
+                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h2 class="text-xl font-semibold mt-4">カートに追加されました</h2>
+            </div>
+
+            <!-- ご注文内容 -->
+            <div class="bg-gray-50 p-4 rounded-lg border">
+                <h3 class="text-lg font-semibold mb-4 border-b pb-2">ご注文内容</h3>
+                <div id="order-summary" class="space-y-3 text-sm">
+                    <p><strong>商品名:</strong><br><span id="summary-product" class="pl-2"></span></p>
+                    <p><strong>学校名:</strong><br><span id="summary-school" class="pl-2"></span></p>
+                    <p><strong>学年:</strong><br><span id="summary-grade" class="pl-2"></span></p>
+                    <p><strong>ご担当者氏名:</strong><br><span id="summary-teacher" class="pl-2"></span></p>
+                    <p><strong>個数:</strong><br><span id="summary-quantity" class="pl-2"></span></p>
+                    <p><strong>組ごとの内訳:</strong><br><span id="summary-classes" class="pl-2"></span></p>
+                    <p><strong>備考:</strong><br><span id="summary-remarks" class="pl-2 whitespace-pre-wrap"></span></p>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-4 mt-auto bg-white border-t space-y-2">
+            <button id="export-single-order-button" class="block w-full text-center py-3 px-4 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 transition font-semibold">
+                売上データ出力 (CSV)
+            </button>
+            <button id="confirm-order-button" class="block w-full text-center py-3 px-4 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 transition font-semibold">
+                注文を確定する
+            </button>
+            <button id="continue-ordering-button" class="block w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                続けて注文する
+            </button>
+            <button id="back-to-menu-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                メニューに戻る
+            </button>
+        </footer>
+    </div>
+
+    <!-- カート一覧画面 -->
+    <div id="cart-list-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダー -->
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">カート一覧</h1>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="p-6 flex-grow overflow-y-auto custom-scrollbar">
+            <div id="cart-list-container" class="space-y-4">
+                <!-- カート内の商品がここに動的に追加されます -->
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-4 mt-auto bg-white border-t space-y-2">
+            <!-- アクションボタン -->
+            <div id="cart-actions" class="hidden space-y-2">
+                 <div class="flex space-x-2">
+                    <button id="delete-selected-button" class="block w-full text-center py-3 px-4 bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 transition font-semibold">
+                        削除する
+                    </button>
+                    <button id="order-selected-button" class="block w-full text-center py-3 px-4 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 transition font-semibold">
+                        注文する
+                    </button>
+                </div>
+                 <button id="export-selected-button" class="block w-full text-center py-3 px-4 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 transition font-semibold mt-2">
+                    選択した商品をデータ出力 (CSV)
+                </button>
+            </div>
+            <button id="cart-list-back-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                メニューに戻る
+            </button>
+        </footer>
+    </div>
+
+    <!-- 注文完了画面 -->
+    <div id="order-complete-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col justify-center items-center p-6">
+        <div class="text-center">
+            <div class="inline-block bg-green-100 rounded-full p-4">
+                <svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h2 class="text-2xl font-semibold mt-6 text-gray-800">ご注文ありがとうございます</h2>
+            <p class="text-gray-600 mt-2">ご注文内容が送信されました。</p>
+            <button id="back-to-menu-from-complete-button" class="mt-8 w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                メニューに戻る
+            </button>
+        </div>
+    </div>
+    
+    <!-- 削除確認モーダル -->
+    <div id="delete-confirmation-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
+                    <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-2">ご注意ください</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">
+                        入力した内容はすべて削除されますが、本当によろしいでしょうか？
+                    </p>
+                </div>
+                <div class="items-center px-4 py-3 flex justify-center space-x-4">
+                    <button id="modal-confirm-delete" class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-24 shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        はい
+                    </button>
+                    <button id="modal-cancel-delete" class="px-4 py-2 bg-gray-200 text-gray-900 text-base font-medium rounded-md w-24 shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        戻る
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden form for Netlify submission -->
+   
+
+    <form name="order-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="order-form" />
+  <input type="text" name="order-details" />
+</form>
+    <script>
+        // グローバル変数
+        let cart = []; // カートのデータを保持する配列
+        let selectedCartItemIds = []; // 選択されたカートアイテムのIDを保持する配列
+        let previousPublisherScreen = null; // 教科選択画面から戻るための変数
+        let previousManufacturerScreen = null; // クラフテリオ画面から戻るための変数
+
+        // 画面要素の取得
+        const mainScreen = document.getElementById('main-screen');
+        const gradeSelectionScreen = document.getElementById('grade-selection-screen');
+        const categorySelectionScreen = document.getElementById('category-selection-screen');
+        const publisherSelectionScreen = document.getElementById('publisher-selection-screen');
+        const publisherTopBottomSelectionScreen = document.getElementById('publisher-top-bottom-selection-screen');
+        const publisherDrillWorkSelectionScreen = document.getElementById('publisher-drill-work-selection-screen');
+        const subjectSelectionScreen = document.getElementById('subject-selection-screen');
+        const productSelectionScreen = document.getElementById('product-selection-screen');
+        const teachingMaterialsScreen = document.getElementById('teaching-materials-screen');
+        const manufacturerSelectionZukouScreen = document.getElementById('manufacturer-selection-zukou-screen');
+        const manufacturerSelectionRikaScreen = document.getElementById('manufacturer-selection-rika-screen');
+        const manufacturerSelectionSeikatsukaScreen = document.getElementById('manufacturer-selection-seikatsuka-screen');
+        const crafterioSelectionScreen = document.getElementById('crafterio-selection-screen');
+        const cartConfirmationScreen = document.getElementById('cart-confirmation-screen');
+        const cartListScreen = document.getElementById('cart-list-screen');
+        const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
+        const orderCompleteScreen = document.getElementById('order-complete-screen');
+
+        // ボタン要素の取得
+        const newOrderButton = document.getElementById('new-order-button');
+        const cartButton = document.getElementById('cart-button');
+        const gradeButtons = document.querySelectorAll('.grade-button');
+        const cancelFromGradeButton = document.getElementById('cancel-button-grade');
+        
+        const testCategoryButton = document.getElementById('test-category-button');
+        const testTopBottomCategoryButton = document.getElementById('test-top-bottom-category-button');
+        const drillWorkCategoryButton = document.getElementById('drill-work-category-button');
+        const teachingMaterialsCategoryButton = document.getElementById('teaching-materials-category-button');
+        const backToGradeButton = document.getElementById('back-to-grade-button');
+        const cancelFromCategoryButton = document.getElementById('cancel-button-category');
+        
+        const backToCategoryButton = document.getElementById('back-to-category-button');
+        const cancelFromPublisherButton = document.getElementById('cancel-button-publisher');
+        const backToCategoryButtonTb = document.getElementById('back-to-category-button-tb');
+        const cancelFromPublisherButtonTb = document.getElementById('cancel-button-publisher-tb');
+        const backToCategoryButtonDw = document.getElementById('back-to-category-button-dw');
+        const cancelFromPublisherButtonDw = document.getElementById('cancel-button-publisher-dw');
+
+        const bunkeidoButtons = document.querySelectorAll('.bunkeido-button');
+        const backToPublisherButton = document.getElementById('back-to-publisher-button');
+        const cancelFromSubjectButton = document.getElementById('cancel-button-subject');
+
+        const kokugoSubjectButton = document.getElementById('kokugo-subject-button');
+        const backToSubjectButton = document.getElementById('back-to-subject-button');
+        const cancelFromProductButton = document.getElementById('cancel-button-product');
+        const addToCartButton = document.getElementById('add-to-cart-button');
+        
+        const backToCategoryFromTmButton = document.getElementById('back-to-category-from-tm-button');
+        const cancelFromTmButton = document.getElementById('cancel-from-tm-button');
+        
+        const zukouTmButton = document.getElementById('zukou-tm-button');
+        const rikaTmButton = document.getElementById('rika-tm-button');
+        const seikatsukaTmButton = document.getElementById('seikatsuka-tm-button');
+
+        const backToTmFromZukouButton = document.getElementById('back-to-tm-from-zukou-button');
+        const cancelFromZukouButton = document.getElementById('cancel-from-zukou-button');
+        const backToTmFromRikaButton = document.getElementById('back-to-tm-from-rika-button');
+        const cancelFromRikaButton = document.getElementById('cancel-from-rika-button');
+        const backToTmFromSeikatsukaButton = document.getElementById('back-to-tm-from-seikatsuka-button');
+        const cancelFromSeikatsukaButton = document.getElementById('cancel-from-seikatsuka-button');
+
+        const crafterioButtons = document.querySelectorAll('.crafterio-button');
+        const backToManufacturerFromCrafterioButton = document.getElementById('back-to-manufacturer-from-crafterio-button');
+        const cancelFromCrafterioButton = document.getElementById('cancel-from-crafterio-button');
+        const addToCartButtonCrafterio = document.getElementById('add-to-cart-button-crafterio');
+
+        const confirmOrderButton = document.getElementById('confirm-order-button');
+        const continueOrderingButton = document.getElementById('continue-ordering-button');
+        const backToMenuButton = document.getElementById('back-to-menu-button');
+        const exportSingleOrderButton = document.getElementById('export-single-order-button');
+        
+        const cartListBackButton = document.getElementById('cart-list-back-button');
+        const cartActions = document.getElementById('cart-actions');
+        const deleteSelectedButton = document.getElementById('delete-selected-button');
+        const orderSelectedButton = document.getElementById('order-selected-button');
+        const exportSelectedButton = document.getElementById('export-selected-button');
+        const modalConfirmDelete = document.getElementById('modal-confirm-delete');
+        const modalCancelDelete = document.getElementById('modal-cancel-delete');
+        const backToMenuFromCompleteButton = document.getElementById('back-to-menu-from-complete-button');
+
+
+        // --- 画面遷移のイベントリスナー ---
+
+        // 「新規注文」ボタン
+        newOrderButton.addEventListener('click', () => {
+            mainScreen.classList.add('hidden');
+            gradeSelectionScreen.classList.remove('hidden');
+        });
+
+        // 「カート」ボタン
+        cartButton.addEventListener('click', () => {
+            renderCartList();
+            mainScreen.classList.add('hidden');
+            cartListScreen.classList.remove('hidden');
+        });
+
+        // 学年選択画面の「キャンセル」
+        cancelFromGradeButton.addEventListener('click', () => {
+            gradeSelectionScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+        
+        // 各学年ボタン
+        gradeButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                gradeSelectionScreen.classList.add('hidden');
+                categorySelectionScreen.classList.remove('hidden');
+            });
+        });
+
+        // カテゴリ選択画面の「戻る」「キャンセル」
+        backToGradeButton.addEventListener('click', () => {
+            categorySelectionScreen.classList.add('hidden');
+            gradeSelectionScreen.classList.remove('hidden');
+        });
+        cancelFromCategoryButton.addEventListener('click', () => {
+            categorySelectionScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // カテゴリボタンから各画面へ
+        testCategoryButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            categorySelectionScreen.classList.add('hidden');
+            publisherSelectionScreen.classList.remove('hidden');
+        });
+        testTopBottomCategoryButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            categorySelectionScreen.classList.add('hidden');
+            publisherTopBottomSelectionScreen.classList.remove('hidden');
+        });
+        drillWorkCategoryButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            categorySelectionScreen.classList.add('hidden');
+            publisherDrillWorkSelectionScreen.classList.remove('hidden');
+        });
+        teachingMaterialsCategoryButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            categorySelectionScreen.classList.add('hidden');
+            teachingMaterialsScreen.classList.remove('hidden');
+        });
+
+
+        // 各出版社選択画面の「戻る」「キャンセル」
+        backToCategoryButton.addEventListener('click', () => { publisherSelectionScreen.classList.add('hidden'); categorySelectionScreen.classList.remove('hidden'); });
+        cancelFromPublisherButton.addEventListener('click', () => { publisherSelectionScreen.classList.add('hidden'); mainScreen.classList.remove('hidden'); });
+        backToCategoryButtonTb.addEventListener('click', () => { publisherTopBottomSelectionScreen.classList.add('hidden'); categorySelectionScreen.classList.remove('hidden'); });
+        cancelFromPublisherButtonTb.addEventListener('click', () => { publisherTopBottomSelectionScreen.classList.add('hidden'); mainScreen.classList.remove('hidden'); });
+        backToCategoryButtonDw.addEventListener('click', () => { publisherDrillWorkSelectionScreen.classList.add('hidden'); categorySelectionScreen.classList.remove('hidden'); });
+        cancelFromPublisherButtonDw.addEventListener('click', () => { publisherDrillWorkSelectionScreen.classList.add('hidden'); mainScreen.classList.remove('hidden'); });
+        
+        // 教材・教具画面の「戻る」「キャンセル」
+        backToCategoryFromTmButton.addEventListener('click', () => {
+            teachingMaterialsScreen.classList.add('hidden');
+            categorySelectionScreen.classList.remove('hidden');
+        });
+        cancelFromTmButton.addEventListener('click', () => {
+            teachingMaterialsScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // 教材・教具の科目ボタンからメーカー選択画面へ
+        zukouTmButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            teachingMaterialsScreen.classList.add('hidden');
+            manufacturerSelectionZukouScreen.classList.remove('hidden');
+        });
+        rikaTmButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            teachingMaterialsScreen.classList.add('hidden');
+            manufacturerSelectionRikaScreen.classList.remove('hidden');
+        });
+        seikatsukaTmButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            teachingMaterialsScreen.classList.add('hidden');
+            manufacturerSelectionSeikatsukaScreen.classList.remove('hidden');
+        });
+
+        // メーカー選択画面（図工）の「戻る」「キャンセル」
+        backToTmFromZukouButton.addEventListener('click', () => {
+            manufacturerSelectionZukouScreen.classList.add('hidden');
+            teachingMaterialsScreen.classList.remove('hidden');
+        });
+        cancelFromZukouButton.addEventListener('click', () => {
+            manufacturerSelectionZukouScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+        
+        // メーカー選択画面（理科）の「戻る」「キャンセル」
+        backToTmFromRikaButton.addEventListener('click', () => {
+            manufacturerSelectionRikaScreen.classList.add('hidden');
+            teachingMaterialsScreen.classList.remove('hidden');
+        });
+        cancelFromRikaButton.addEventListener('click', () => {
+            manufacturerSelectionRikaScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // メーカー選択画面（生活科）の「戻る」「キャンセル」
+        backToTmFromSeikatsukaButton.addEventListener('click', () => {
+            manufacturerSelectionSeikatsukaScreen.classList.add('hidden');
+            teachingMaterialsScreen.classList.remove('hidden');
+        });
+        cancelFromSeikatsukaButton.addEventListener('click', () => {
+            manufacturerSelectionSeikatsukaScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // 「クラフテリオ」ボタン
+        crafterioButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                previousManufacturerScreen = button.closest('.max-w-sm');
+                previousManufacturerScreen.classList.add('hidden');
+                crafterioSelectionScreen.classList.remove('hidden');
+            });
+        });
+
+        // クラフテリオ画面の「戻る」「キャンセル」
+        backToManufacturerFromCrafterioButton.addEventListener('click', () => {
+            crafterioSelectionScreen.classList.add('hidden');
+            if (previousManufacturerScreen) previousManufacturerScreen.classList.remove('hidden');
+        });
+        cancelFromCrafterioButton.addEventListener('click', () => {
+            crafterioSelectionScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+
+        // 「文溪堂」ボタン
+        bunkeidoButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                previousPublisherScreen = button.closest('.max-w-sm');
+                previousPublisherScreen.classList.add('hidden');
+                subjectSelectionScreen.classList.remove('hidden');
+            });
+        });
+
+        // 教科選択画面の「戻る」「キャンセル」
+        backToPublisherButton.addEventListener('click', () => {
+            subjectSelectionScreen.classList.add('hidden');
+            if (previousPublisherScreen) previousPublisherScreen.classList.remove('hidden');
+        });
+        cancelFromSubjectButton.addEventListener('click', () => {
+            subjectSelectionScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // 「国語」ボタン
+        kokugoSubjectButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            resetProductForm();
+            subjectSelectionScreen.classList.add('hidden');
+            productSelectionScreen.classList.remove('hidden');
+        });
+
+        // 商品選択画面の「戻る」「キャンセル」
+        backToSubjectButton.addEventListener('click', () => {
+            productSelectionScreen.classList.add('hidden');
+            subjectSelectionScreen.classList.remove('hidden');
+        });
+        cancelFromProductButton.addEventListener('click', () => {
+            productSelectionScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // カート確認画面のボタン
+        continueOrderingButton.addEventListener('click', () => {
+            cartConfirmationScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+        backToMenuButton.addEventListener('click', () => {
+            cartConfirmationScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+        
+        // カート一覧画面の「戻る」
+        cartListBackButton.addEventListener('click', () => {
+            cartListScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // 注文完了画面の「メニューに戻る」
+        backToMenuFromCompleteButton.addEventListener('click', () => {
+            orderCompleteScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+        
+        
+        // --- 機能関連のイベントリスナー ---
+        
+        // 「カートに追加」または「注文を更新」ボタンの処理（文溪堂・国語）
+        addToCartButton.addEventListener('click', () => {
+            const editingId = document.getElementById('editing-cart-item-id').value;
+            if (validateProductForm('product-selection-screen')) {
+                const orderData = getFormData('product-selection-screen');
+                if (editingId) {
+                    const index = cart.findIndex(item => item.id === editingId);
+                    if (index !== -1) cart[index] = { ...cart[index], ...orderData };
+                } else {
+                    orderData.id = `cart_${new Date().getTime()}`;
+                    orderData.addedDate = new Date();
+                    cart.push(orderData);
+                }
+                showOrderSummary(orderData);
+                productSelectionScreen.classList.add('hidden');
+                cartConfirmationScreen.classList.remove('hidden');
+            }
+        });
+
+        // 「カートに追加」ボタンの処理（クラフテリオ）
+        addToCartButtonCrafterio.addEventListener('click', () => {
+            if (validateProductForm('crafterio-selection-screen')) {
+                const orderData = getFormData('crafterio-selection-screen');
+                orderData.id = `cart_${new Date().getTime()}`;
+                orderData.addedDate = new Date();
+                cart.push(orderData);
+                showOrderSummary(orderData);
+                crafterioSelectionScreen.classList.add('hidden');
+                cartConfirmationScreen.classList.remove('hidden');
+            }
+        });
+
+
+        // 単一注文のデータ出力
+        exportSingleOrderButton.addEventListener('click', () => {
+            if (cart.length > 0) {
+                exportToCSV([cart[cart.length - 1]]);
+            }
+        });
+
+        // 「注文を確定する」ボタン（カート確認画面）
+        confirmOrderButton.addEventListener('click', () => {
+            if (cart.length > 0) {
+                const lastItem = cart[cart.length - 1];
+                sendOrderEmail([lastItem]);
+                // 注文した商品をカートから削除
+                cart.pop(); 
+            }
+        });
+        
+        // 「削除する」ボタン（カート一覧）
+        deleteSelectedButton.addEventListener('click', () => {
+            deleteConfirmationModal.classList.remove('hidden');
+        });
+
+        // 削除確認モーダルの「はい」
+        modalConfirmDelete.addEventListener('click', () => {
+            cart = cart.filter(item => !selectedCartItemIds.includes(item.id));
+            selectedCartItemIds = [];
+            renderCartList();
+            deleteConfirmationModal.classList.add('hidden');
+        });
+
+        // 削除確認モーダルの「戻る」
+        modalCancelDelete.addEventListener('click', () => {
+            deleteConfirmationModal.classList.add('hidden');
+        });
+
+        // 「注文する」ボタン（カート一覧）
+        orderSelectedButton.addEventListener('click', () => {
+            const selectedItems = cart.filter(item => selectedCartItemIds.includes(item.id));
+            if (selectedItems.length > 0) {
+                sendOrderEmail(selectedItems);
+                // 注文した商品をカートから削除
+                cart = cart.filter(item => !selectedCartItemIds.includes(item.id));
+                selectedCartItemIds = [];
+            }
+        });
+        
+        // 選択されたカートアイテムのデータ出力
+        exportSelectedButton.addEventListener('click', () => {
+            const selectedItems = cart.filter(item => selectedCartItemIds.includes(item.id));
+            if (selectedItems.length > 0) exportToCSV(selectedItems);
+        });
+
+        // --- 関数定義 ---
+
+        function getFormData(screenId) {
+            const screen = document.getElementById(screenId);
+            const productSelect = screen.querySelector('select');
+            const inputs = Object.fromEntries(
+                [...screen.querySelectorAll('input[type="text"], input[type="number"]')]
+                  .map(i => [i.id, i.value])
+              );
+            const remarks = screen.querySelector('textarea').value;
+            
+            const classQuantities = {};
+            for (let i = 1; i <= 6; i++) {
+                const qty = screen.querySelector(`input[id*="class${i}-qty"]`).value;
+                if (qty && qty > 0) classQuantities[i] = qty;
+            }
+
+            return {
+                productId: productSelect.value,
+                productName: productSelect.options[productSelect.selectedIndex].text,
+                schoolName: inputs[`school-name${screenId.includes('crafterio') ? '-crafterio' : ''}`],
+                grade: inputs[`grade${screenId.includes('crafterio') ? '-crafterio' : ''}`],
+                teacherName: inputs[`teacher-name${screenId.includes('crafterio') ? '-crafterio' : ''}`],
+                totalQuantity: inputs[`total-quantity${screenId.includes('crafterio') ? '-crafterio' : ''}`],
+                classQuantities: classQuantities,
+                remarks: remarks,
+            };
+        }
+
+        // 商品入力フォームのバリデーション
+        function validateProductForm(screenId) {
+            const screen = document.getElementById(screenId);
+            const isCrafterio = screenId.includes('crafterio');
+            const suffix = isCrafterio ? '-crafterio' : '';
+            
+            const fieldsToValidate = [
+                { el: screen.querySelector(`#product-select${suffix}`), value: screen.querySelector(`#product-select${suffix}`).value },
+                { el: screen.querySelector(`#school-name${suffix}`), value: screen.querySelector(`#school-name${suffix}`).value.trim() },
+                { el: screen.querySelector(`#grade${suffix}`), value: screen.querySelector(`#grade${suffix}`).value.trim() },
+                { el: screen.querySelector(`#teacher-name${suffix}`), value: screen.querySelector(`#teacher-name${suffix}`).value.trim() },
+                { el: screen.querySelector(`#total-quantity${suffix}`), value: screen.querySelector(`#total-quantity${suffix}`).value.trim() }
+            ];
+
+            fieldsToValidate.forEach(field => {
+                field.el.classList.remove('is-invalid', 'placeholder-red');
+                if (field.el.tagName.toLowerCase() === 'input') {
+                    field.el.placeholder = field.el.dataset.placeholder;
+                }
+            });
+
+            const invalidFields = fieldsToValidate.filter(field => !field.value);
+            const errorMessage = screen.querySelector(`p[id*="error-message"]`);
+
+            if (invalidFields.length > 0) {
+                errorMessage.classList.remove('hidden');
+                invalidFields.forEach(field => {
+                    field.el.classList.add('is-invalid');
+                    if (field.el.tagName.toLowerCase() === 'input') {
+                        field.el.classList.add('placeholder-red');
+                        field.el.placeholder = '※必須';
+                    }
+                });
+                return false;
+            } else {
+                errorMessage.classList.add('hidden');
+                return true;
+            }
+        }
+
+        // 商品入力フォームをリセット
+        function resetProductForm() {
+            // 文溪堂フォーム
+            document.getElementById('product-select').value = '';
+            document.getElementById('school-name').value = '';
+            document.getElementById('grade').value = '';
+            document.getElementById('teacher-name').value = '';
+            document.getElementById('total-quantity').value = '';
+            document.getElementById('remarks').value = '';
+            for (let i = 1; i <= 6; i++) document.getElementById(`class${i}-qty`).value = '';
+            document.getElementById('editing-cart-item-id').value = '';
+            addToCartButton.textContent = 'カートに追加';
+            
+            // クラフテリオフォーム
+            document.getElementById('product-select-crafterio').value = '';
+            document.getElementById('school-name-crafterio').value = '';
+            document.getElementById('grade-crafterio').value = '';
+            document.getElementById('teacher-name-crafterio').value = '';
+            document.getElementById('total-quantity-crafterio').value = '';
+            document.getElementById('remarks-crafterio').value = '';
+            for (let i = 1; i <= 6; i++) document.getElementById(`class${i}-qty-crafterio`).value = '';
+        }
+
+        // 注文内容確認を表示
+        function showOrderSummary(data) {
+            const classQtys = Object.entries(data.classQuantities).map(([key, value]) => `${key}組: ${value}個`);
+            document.getElementById('summary-product').textContent = data.productName;
+            document.getElementById('summary-school').textContent = data.schoolName;
+            document.getElementById('summary-grade').textContent = data.grade;
+            document.getElementById('summary-teacher').textContent = data.teacherName;
+            document.getElementById('summary-quantity').textContent = data.totalQuantity + '個';
+            document.getElementById('summary-classes').textContent = classQtys.length > 0 ? classQtys.join(', ') : 'なし';
+            document.getElementById('summary-remarks').textContent = data.remarks || 'なし';
+        }
+
+        // カート一覧を描画
+        function renderCartList() {
+            const container = document.getElementById('cart-list-container');
+            container.innerHTML = ''; // コンテナをクリア
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center">カートに商品がありません。</p>';
+            } else {
+                cart.forEach(item => {
+                    const isSelected = selectedCartItemIds.includes(item.id);
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = `p-4 border rounded-lg shadow-sm cursor-pointer relative ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'}`;
+                    itemDiv.dataset.itemId = item.id;
+
+                    const date = new Date(item.addedDate);
+                    const dateString = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                    
+                    itemDiv.innerHTML = `
+                        ${isSelected ? '<div class="absolute top-2 left-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>' : ''}
+                        <p class="font-bold text-lg mb-2 pl-6">${item.productName}</p>
+                        <p class="text-sm text-gray-600"><strong>学校名:</strong> ${item.schoolName}</p>
+                        <p class="text-sm text-gray-600"><strong>合計個数:</strong> ${item.totalQuantity}個</p>
+                        <p class="text-xs text-gray-400 mt-2 text-right">追加日時: ${dateString}</p>
+                    `;
+                    container.appendChild(itemDiv);
+                });
+            }
+            updateCartActionsVisibility();
+        }
+
+        // カート一覧での商品クリック処理
+        document.getElementById('cart-list-container').addEventListener('click', (event) => {
+            const itemDiv = event.target.closest('[data-item-id]');
+            if (!itemDiv) return;
+
+            const itemId = itemDiv.dataset.itemId;
+            const itemIndex = selectedCartItemIds.indexOf(itemId);
+
+            if (itemIndex > -1) {
+                // 既に選択されている場合は編集画面へ
+                const itemToEdit = cart.find(item => item.id === itemId);
+                if(itemToEdit) {
+                    // どのフォームにデータを投入するかを判定
+                    if (itemToEdit.productId.startsWith('craft-')) {
+                        populateCrafterioFormForEdit(itemToEdit);
+                        cartListScreen.classList.add('hidden');
+                        crafterioSelectionScreen.classList.remove('hidden');
+                    } else {
+                        populateProductFormForEdit(itemToEdit);
+                        cartListScreen.classList.add('hidden');
+                        productSelectionScreen.classList.remove('hidden');
+                    }
+                }
+            } else {
+                // 新規選択
+                selectedCartItemIds.push(itemId);
+            }
+            renderCartList(); // 選択状態を反映して再描画
+        });
+
+        // カートアイテムの編集フォームを準備 (文溪堂・国語)
+        function populateProductFormForEdit(item) {
+            resetProductForm();
+            document.getElementById('product-select').value = item.productId;
+            document.getElementById('school-name').value = item.schoolName;
+            document.getElementById('grade').value = item.grade;
+            document.getElementById('teacher-name').value = item.teacherName;
+            document.getElementById('total-quantity').value = item.totalQuantity;
+            document.getElementById('remarks').value = item.remarks;
+            for (const [classNum, qty] of Object.entries(item.classQuantities)) {
+                document.getElementById(`class${classNum}-qty`).value = qty;
+            }
+            document.getElementById('editing-cart-item-id').value = item.id;
+            addToCartButton.textContent = '注文を更新する';
+        }
+        
+        // カートアイテムの編集フォームを準備 (クラフテリオ)
+        function populateCrafterioFormForEdit(item) {
+            resetProductForm();
+             document.getElementById('product-select-crafterio').value = item.productId;
+            document.getElementById('school-name-crafterio').value = item.schoolName;
+            document.getElementById('grade-crafterio').value = item.grade;
+            document.getElementById('teacher-name-crafterio').value = item.teacherName;
+            document.getElementById('total-quantity-crafterio').value = item.totalQuantity;
+            document.getElementById('remarks-crafterio').value = item.remarks;
+            for (const [classNum, qty] of Object.entries(item.classQuantities)) {
+                document.getElementById(`class${classNum}-qty-crafterio`).value = qty;
+            }
+            document.getElementById('editing-cart-item-id-crafterio').value = item.id;
+            addToCartButtonCrafterio.textContent = '注文を更新する';
+        }
+
+
+        // カートアクションボタンの表示/非表示を更新
+        function updateCartActionsVisibility() {
+            if (selectedCartItemIds.length > 0) {
+                cartActions.classList.remove('hidden');
+            } else {
+                cartActions.classList.add('hidden');
+            }
+        }
+        
+        // CSVエクスポート機能
+        function exportToCSV(data) {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const headers = ["商品名", "学校名", "学年", "担当者名", "合計個数", "1組", "2組", "3組", "4組", "5組", "6組", "備考"];
+            csvContent += headers.join(",") + "\r\n";
+
+            data.forEach(item => {
+                const row = [
+                    `"${item.productName}"`,
+                    `"${item.schoolName}"`,
+                    `"${item.grade}"`,
+                    `"${item.teacherName}"`,
+                    item.totalQuantity,
+                    item.classQuantities[1] || "",
+                    item.classQuantities[2] || "",
+                    item.classQuantities[3] || "",
+                    item.classQuantities[4] || "",
+                    item.classQuantities[5] || "",
+                    item.classQuantities[6] || "",
+                    `"${item.remarks.replace(/"/g, '""')}"`
+                ].join(",");
+                csvContent += row + "\r\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            const fileName = `order_data_${new Date().toISOString().slice(0,10)}.csv`;
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 注文内容をメールで送信する関数
+function sendOrderEmail(orderDataArray) {
+    let emailBody = "新規注文がありました。\n\n--- 注文内容 ---\n\n";
+
+    orderDataArray.forEach((item, index) => {
+        const classQtys = Object.entries(item.classQuantities).map(([key, value]) => `  ${key}組: ${value}個`).join('\n');
+        emailBody += `[${index + 1}件目]\n`;
+        emailBody += `商品名: ${item.productName}\n`;
+        emailBody += `学校名: ${item.schoolName}\n`;
+        emailBody += `学年: ${item.grade}\n`;
+        emailBody += `ご担当者氏名: ${item.teacherName}\n`;
+        emailBody += `合計個数: ${item.totalQuantity}個\n`;
+        emailBody += `組ごとの内訳:\n${classQtys || '  なし'}\n`;
+        emailBody += `備考: ${item.remarks || 'なし'}\n\n`;
+    });
+
+    const formData = new FormData();
+    // ★重要：隠しフォームで設定したname属性'order-form'を指定します
+    formData.append('form-name', 'order-form');
+    formData.append('order-details', emailBody);
+
+    // ★重要：Netlifyが自動で処理できるように、headersは含めません
+    fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+    })
+    .then(() => {
+        // 成功したら完了画面を表示
+        cartConfirmationScreen.classList.add('hidden');
+        cartListScreen.classList.add('hidden');
+        orderCompleteScreen.classList.remove('hidden');
+    })
+    .catch(error => {
+        // 失敗したらエラーを表示
+        console.error('Form submission error:', error);
+        alert('注文の送信に失敗しました。お手数ですが、ネットワーク環境をご確認の上、再度お試しください。');
+    });
+}
+    </script>
+</body>
+</html>
