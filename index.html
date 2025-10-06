@@ -305,7 +305,7 @@
 
         <!-- メインコンテンツ -->
         <main class="p-6 flex-grow">
-            <form id="product-form" name="product-order" data-netlify="true">
+            <form id="product-form">
                 <input type="hidden" id="editing-cart-item-id" value="">
                 <div class="mb-8 text-center">
                     <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
@@ -315,7 +315,7 @@
                     <!-- 商品選択プルダウン -->
                     <div>
                         <label for="product-select" class="block text-sm font-medium text-gray-700">商品選択</label>
-                        <select id="product-select" name="product" class="mt-1 block w-full py-3 px-4 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <select id="product-select" class="mt-1 block w-full py-3 px-4 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="">-- 商品を選択してください --</option>
                             <option value="item1">(文溪)国語テスト A 1学期</option>
                             <option value="item2">(文溪)国語テスト A 2学期</option>
@@ -520,7 +520,7 @@
     <div id="crafterio-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">クラフテリオ</h1></header>
         <main class="p-6 flex-grow">
-            <form id="product-form" name="product-order" data-netlify="true">
+            <form id="product-form-crafterio">
                 <input type="hidden" id="editing-cart-item-id-crafterio" value="">
                 <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
                 <div class="space-y-5">
@@ -686,6 +686,20 @@
             </button>
         </footer>
     </div>
+
+    <!-- 注文完了画面 -->
+    <div id="order-complete-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col justify-center items-center p-6">
+        <div class="text-center">
+            <div class="inline-block bg-green-100 rounded-full p-4">
+                <svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h2 class="text-2xl font-semibold mt-6 text-gray-800">ご注文ありがとうございます</h2>
+            <p class="text-gray-600 mt-2">ご注文内容が送信されました。</p>
+            <button id="back-to-menu-from-complete-button" class="mt-8 w-full text-center py-3 px-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition font-semibold">
+                メニューに戻る
+            </button>
+        </div>
+    </div>
     
     <!-- 削除確認モーダル -->
     <div id="delete-confirmation-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -714,6 +728,16 @@
         </div>
     </div>
 
+    <!-- Hidden form for Netlify submission -->
+    <form name="product-order" netlify netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="product-order" />
+        <p class="hidden">
+            <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+        </p>
+        <input type="text" name="subject" />
+        <textarea name="order-details"></textarea>
+    </form>
+
 
     <script>
         // グローバル変数
@@ -739,6 +763,7 @@
         const cartConfirmationScreen = document.getElementById('cart-confirmation-screen');
         const cartListScreen = document.getElementById('cart-list-screen');
         const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
+        const orderCompleteScreen = document.getElementById('order-complete-screen');
 
         // ボタン要素の取得
         const newOrderButton = document.getElementById('new-order-button');
@@ -800,6 +825,8 @@
         const exportSelectedButton = document.getElementById('export-selected-button');
         const modalConfirmDelete = document.getElementById('modal-confirm-delete');
         const modalCancelDelete = document.getElementById('modal-cancel-delete');
+        const backToMenuFromCompleteButton = document.getElementById('back-to-menu-from-complete-button');
+
 
         // --- 画面遷移のイベントリスナー ---
 
@@ -1003,6 +1030,13 @@
             cartListScreen.classList.add('hidden');
             mainScreen.classList.remove('hidden');
         });
+
+        // 注文完了画面の「メニューに戻る」
+        backToMenuFromCompleteButton.addEventListener('click', () => {
+            orderCompleteScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+        
         
         // --- 機能関連のイベントリスナー ---
         
@@ -1045,6 +1079,16 @@
                 exportToCSV([cart[cart.length - 1]]);
             }
         });
+
+        // 「注文を確定する」ボタン（カート確認画面）
+        confirmOrderButton.addEventListener('click', () => {
+            if (cart.length > 0) {
+                const lastItem = cart[cart.length - 1];
+                sendOrderEmail([lastItem]);
+                // 注文した商品をカートから削除
+                cart.pop(); 
+            }
+        });
         
         // 「削除する」ボタン（カート一覧）
         deleteSelectedButton.addEventListener('click', () => {
@@ -1067,7 +1111,12 @@
         // 「注文する」ボタン（カート一覧）
         orderSelectedButton.addEventListener('click', () => {
             const selectedItems = cart.filter(item => selectedCartItemIds.includes(item.id));
-            console.log('選択された商品を注文します。', selectedItems);
+            if (selectedItems.length > 0) {
+                sendOrderEmail(selectedItems);
+                // 注文した商品をカートから削除
+                cart = cart.filter(item => !selectedCartItemIds.includes(item.id));
+                selectedCartItemIds = [];
+            }
         });
         
         // 選択されたカートアイテムのデータ出力
@@ -1218,8 +1267,7 @@
                 // 既に選択されている場合は編集画面へ
                 const itemToEdit = cart.find(item => item.id === itemId);
                 if(itemToEdit) {
-                    // どのフォームにデータを投入するかを判定する必要がある
-                    // ここでは簡略化のため、クラフテリオ以外は国語フォームと仮定
+                    // どのフォームにデータを投入するかを判定
                     if (itemToEdit.productId.startsWith('craft-')) {
                         populateCrafterioFormForEdit(itemToEdit);
                         cartListScreen.classList.add('hidden');
@@ -1313,8 +1361,45 @@
             document.body.removeChild(link);
         }
 
+        // 注文内容をメールで送信する関数
+        function sendOrderEmail(orderDataArray) {
+            let emailBody = "新規注文がありました。\n\n--- 注文内容 ---\n\n";
+
+            orderDataArray.forEach((item, index) => {
+                const classQtys = Object.entries(item.classQuantities).map(([key, value]) => `  ${key}組: ${value}個`).join('\n');
+                emailBody += `[${index + 1}件目]\n`;
+                emailBody += `商品名: ${item.productName}\n`;
+                emailBody += `学校名: ${item.schoolName}\n`;
+                emailBody += `学年: ${item.grade}\n`;
+                emailBody += `ご担当者氏名: ${item.teacherName}\n`;
+                emailBody += `合計個数: ${item.totalQuantity}個\n`;
+                emailBody += `組ごとの内訳:\n${classQtys || '  なし'}\n`;
+                emailBody += `備考: ${item.remarks || 'なし'}\n\n`;
+            });
+
+            const formData = new FormData();
+            formData.append('form-name', 'product-order');
+            // Netlifyのフォーム設定で件名を設定するため、ここでは不要ですが、
+            // Formspreeなど他のサービスを使う場合は必要になることがあります。
+            // formData.append('subject', `【Web発注システム】新規注文のお知らせ`);
+            formData.append('order-details', emailBody);
+
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                cartConfirmationScreen.classList.add('hidden');
+                cartListScreen.classList.add('hidden');
+                orderCompleteScreen.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Form submission error:', error);
+                alert('注文の送信に失敗しました。お手数ですが、ネットワーク環境をご確認の上、再度お試しください。');
+            });
+        }
+
     </script>
 </body>
 </html>
-
-
