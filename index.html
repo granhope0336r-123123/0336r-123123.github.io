@@ -305,8 +305,8 @@
 
         <!-- メインコンテンツ -->
         <main class="p-6 flex-grow">
-            <form id="product-form" name="product-order" data-netlify="true">
-                <input type="hidden" id="editing-cart-item-id" value="">
+            <form id="product-form">               
+            <input type="hidden" id="editing-cart-item-id" value="">
                 <div class="mb-8 text-center">
                     <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
                 </div>
@@ -520,7 +520,7 @@
     <div id="crafterio-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">クラフテリオ</h1></header>
         <main class="p-6 flex-grow">
-           <form id="product-form" name="product-order" data-netlify="true">
+           <form id="product-form">
                 <input type="hidden" id="editing-cart-item-id-crafterio" value="">
                 <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
                 <div class="space-y-5">
@@ -729,7 +729,7 @@
     </div>
 
     <!-- Hidden form for Netlify submission -->
-    <form id="product-form" name="product-order" data-netlify="true">
+    <form id="product-form">
         <input type="hidden" name="form-name" value="product-order" />
         <p class="hidden">
             <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
@@ -738,7 +738,9 @@
         <textarea name="order-details"></textarea>
     </form>
 
-
+    <form name="order-form" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="order-details" />
+</form>
     <script>
         // グローバル変数
         let cart = []; // カートのデータを保持する配列
@@ -1378,7 +1380,7 @@
             });
 
             const formData = new FormData();
-            formData.append('form-name', 'product-order');
+            formData.append('form-name', 'order-form');
             // Netlifyのフォーム設定で件名を設定するため、ここでは不要ですが、
             // Formspreeなど他のサービスを使う場合は必要になることがあります。
             // formData.append('subject', `【Web発注システム】新規注文のお知らせ`);
