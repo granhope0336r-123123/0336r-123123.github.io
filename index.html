@@ -305,7 +305,7 @@
 
         <!-- メインコンテンツ -->
         <main class="p-6 flex-grow">
-            <form name="product-order" data-netlify="true">
+            <form id="product-form" name="product-order" data-netlify="true">
                 <input type="hidden" id="editing-cart-item-id" value="">
                 <div class="mb-8 text-center">
                     <h2 class="text-xl font-semibold">〇〇様 (通常)</h2>
@@ -520,7 +520,7 @@
     <div id="crafterio-selection-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
         <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative"><h1 class="text-lg font-bold">クラフテリオ</h1></header>
         <main class="p-6 flex-grow">
-            <form name="product-order" data-netlify="true">
+           <form id="product-form" name="product-order" data-netlify="true">
                 <input type="hidden" id="editing-cart-item-id-crafterio" value="">
                 <div class="mb-8 text-center"><h2 class="text-xl font-semibold">〇〇様 (通常)</h2></div>
                 <div class="space-y-5">
@@ -729,7 +729,7 @@
     </div>
 
     <!-- Hidden form for Netlify submission -->
-    <form name="product-order" netlify netlify-honeypot="bot-field" hidden>
+    <form id="product-form" name="product-order" data-netlify="true">
         <input type="hidden" name="form-name" value="product-order" />
         <p class="hidden">
             <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
