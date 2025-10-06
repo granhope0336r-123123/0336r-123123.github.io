@@ -1364,44 +1364,43 @@
         }
 
         // 注文内容をメールで送信する関数
-        function sendOrderEmail(orderDataArray) {
-            let emailBody = "新規注文がありました。\n\n--- 注文内容 ---\n\n";
+function sendOrderEmail(orderDataArray) {
+    let emailBody = "新規注文がありました。\n\n--- 注文内容 ---\n\n";
 
-            orderDataArray.forEach((item, index) => {
-                const classQtys = Object.entries(item.classQuantities).map(([key, value]) => `  ${key}組: ${value}個`).join('\n');
-                emailBody += `[${index + 1}件目]\n`;
-                emailBody += `商品名: ${item.productName}\n`;
-                emailBody += `学校名: ${item.schoolName}\n`;
-                emailBody += `学年: ${item.grade}\n`;
-                emailBody += `ご担当者氏名: ${item.teacherName}\n`;
-                emailBody += `合計個数: ${item.totalQuantity}個\n`;
-                emailBody += `組ごとの内訳:\n${classQtys || '  なし'}\n`;
-                emailBody += `備考: ${item.remarks || 'なし'}\n\n`;
-            });
+    orderDataArray.forEach((item, index) => {
+        const classQtys = Object.entries(item.classQuantities).map(([key, value]) => `  ${key}組: ${value}個`).join('\n');
+        emailBody += `[${index + 1}件目]\n`;
+        emailBody += `商品名: ${item.productName}\n`;
+        emailBody += `学校名: ${item.schoolName}\n`;
+        emailBody += `学年: ${item.grade}\n`;
+        emailBody += `ご担当者氏名: ${item.teacherName}\n`;
+        emailBody += `合計個数: ${item.totalQuantity}個\n`;
+        emailBody += `組ごとの内訳:\n${classQtys || '  なし'}\n`;
+        emailBody += `備考: ${item.remarks || 'なし'}\n\n`;
+    });
 
-            const formData = new FormData();
-            formData.append('form-name', 'order-form');
-            // Netlifyのフォーム設定で件名を設定するため、ここでは不要ですが、
-            // Formspreeなど他のサービスを使う場合は必要になることがあります。
-            // formData.append('subject', `【Web発注システム】新規注文のお知らせ`);
-            formData.append('order-details', emailBody);
+    const formData = new FormData();
+    // ★重要：隠しフォームで設定したname属性'order-form'を指定します
+    formData.append('form-name', 'order-form');
+    formData.append('order-details', emailBody);
 
-            fetch('/', {
-                method: 'POST',
-                
-                body: new URLSearchParams(formData).toString()
-            })
-            .then(() => {
-                cartConfirmationScreen.classList.add('hidden');
-                cartListScreen.classList.add('hidden');
-                orderCompleteScreen.classList.remove('hidden');
-            })
-            .catch(error => {
-                console.error('Form submission error:', error);
-                alert('注文の送信に失敗しました。お手数ですが、ネットワーク環境をご確認の上、再度お試しください。');
-            });
-        }
-
+    // ★重要：Netlifyが自動で処理できるように、headersは含めません
+    fetch('/', {
+        method: 'POST',
+        body: new URLSearchParams(formData).toString()
+    })
+    .then(() => {
+        // 成功したら完了画面を表示
+        cartConfirmationScreen.classList.add('hidden');
+        cartListScreen.classList.add('hidden');
+        orderCompleteScreen.classList.remove('hidden');
+    })
+    .catch(error => {
+        // 失敗したらエラーを表示
+        console.error('Form submission error:', error);
+        alert('注文の送信に失敗しました。お手数ですが、ネットワーク環境をご確認の上、再度お試しください。');
+    });
+}
     </script>
 </body>
 </html>
