@@ -55,7 +55,7 @@
         <main class="p-6">
             <!-- ユーザー挨拶 -->
             <div class="mb-8 text-center">
-                <p class="text-gray-600 text-2xl">グランホープカメヤ教材発注フォーム</p></div>
+                <p class="text-gray-600 text-2xl">グランホープカメヤ教材<br>WEB発注フォーム</p></div>
 
             <!-- ナビゲーションメニュー -->
             <nav class="space-y-4">
@@ -67,11 +67,7 @@
                 </a>
                 <button id="cart-button" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">
                     カート
-                </button>
-                <a href="#" class="block w-full text-center py-3 px-4 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm font-semibold transition hover:border-red-500 hover:text-red-500 hover:bg-gray-50">
-                    請求予定
-                </a>
-</nav>
+                </button></nav>
             <section aria-labelledby="notice-title" class="mt-8 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <h3 id="notice-title" class="text-base font-semibold text-gray-800 mb-2">お知らせ</h3>
                 <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
@@ -688,6 +684,29 @@
     </div>
     
     <!-- 削除確認モーダル -->
+    
+    <!-- 注文履歴画面 (新規追加) -->
+    <div id="order-history-screen" class="hidden max-w-sm mx-auto bg-white shadow-lg min-h-screen flex flex-col">
+        <!-- ヘッダー -->
+        <header class="bg-slate-800 text-white p-4 flex justify-center items-center relative">
+            <h1 class="text-lg font-bold">注文履歴</h1>
+        </header>
+
+        <!-- メイン -->
+        <main class="p-6 flex-grow overflow-y-auto custom-scrollbar">
+            <div id="order-history-container" class="space-y-4">
+                <!-- 履歴のカードが動的に挿入されます -->
+            </div>
+            <p id="order-history-empty" class="text-sm text-gray-500 text-center hidden mt-6">まだ注文履歴がありません。</p>
+        </main>
+
+        <!-- フッター -->
+        <footer class="p-4 mt-auto bg-white border-t">
+            <button id="order-history-back-button" class="block w-full text-center py-3 px-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 transition">
+                メニューに戻る
+            </button>
+        </footer>
+    </div>
     <div id="delete-confirmation-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
@@ -1386,5 +1405,167 @@ function sendOrderEmail(orderDataArray) {
     });
 }
     </script>
+
+<script>
+(function(){
+    // ---- 注文履歴 永続化ユーティリティ ----
+    const STORAGE_KEY = 'orderHistory';
+
+    function getOrderHistory(){
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch(e){
+            console.error('Failed to parse order history:', e);
+            return [];
+        }
+    }
+    function setOrderHistory(list){
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        } catch(e){
+            console.error('Failed to save order history:', e);
+        }
+    }
+
+    // ---- 画面要素 ----
+    const mainScreen = document.getElementById('main-screen');
+    const orderHistoryScreen = document.getElementById('order-history-screen');
+    const orderHistoryContainer = document.getElementById('order-history-container');
+    const orderHistoryEmpty = document.getElementById('order-history-empty');
+    const orderHistoryBackButton = document.getElementById('order-history-back-button');
+
+    // ナビの「注文履歴」要素をテキストで取得（既存HTMLを変更しないため）
+    const nav = document.querySelector('nav.space-y-4');
+    let orderHistoryNavLink = null;
+    if (nav){
+        const navItems = nav.querySelectorAll('a, button');
+        navItems.forEach(el => {
+            if (el.textContent.trim() === '注文履歴'){
+                orderHistoryNavLink = el;
+            }
+        });
+    }
+
+    function renderOrderHistory(){
+        const list = getOrderHistory();
+        orderHistoryContainer.innerHTML = '';
+        if (!list.length){
+            orderHistoryEmpty.classList.remove('hidden');
+            return;
+        }
+        orderHistoryEmpty.classList.add('hidden');
+
+        list
+          .slice() // copy
+          .reverse() // 新しい順に表示
+          .forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'border rounded-lg p-4 bg-gray-50';
+            const dt = new Date(item.date);
+            const dateStr = isNaN(dt.getTime()) ? '' : (dt.toLocaleString && dt.toLocaleString()) || item.date;
+
+            card.innerHTML = `
+                <div class="text-sm text-gray-500 mb-2">${dateStr}</div>
+                <div class="space-y-1 text-sm">
+                    ${item.product ? `<p><strong>商品名:</strong> ${escapeHtml(item.product)}</p>` : ''}
+                    ${item.school ? `<p><strong>学校名:</strong> ${escapeHtml(item.school)}</p>` : ''}
+                    ${item.grade ? `<p><strong>学年:</strong> ${escapeHtml(item.grade)}</p>` : ''}
+                    ${item.teacher ? `<p><strong>ご担当者氏名:</strong> ${escapeHtml(item.teacher)}</p>` : ''}
+                    ${item.quantity ? `<p><strong>個数:</strong> ${escapeHtml(item.quantity)}</p>` : ''}
+                    ${item.classes ? `<p><strong>組ごとの内訳:</strong> ${escapeHtml(item.classes)}</p>` : ''}
+                    ${item.remarks ? `<p class="whitespace-pre-wrap"><strong>備考:</strong> ${escapeHtml(item.remarks)}</p>` : ''}
+                </div>
+            `;
+            orderHistoryContainer.appendChild(card);
+          });
+    }
+
+    function showOrderHistory(){
+        renderOrderHistory();
+        if (mainScreen) mainScreen.classList.add('hidden');
+        if (orderHistoryScreen) orderHistoryScreen.classList.remove('hidden');
+
+        // 履歴画面に遷移したことを履歴APIでも残す（戻る操作に対応）
+        try { history.pushState({screen:'order-history'}, '', '#order-history'); } catch(e){}
+    }
+
+    function hideOrderHistory(){
+        if (orderHistoryScreen) orderHistoryScreen.classList.add('hidden');
+        if (mainScreen) mainScreen.classList.remove('hidden');
+    }
+
+    // クリックで履歴画面を開く
+    if (orderHistoryNavLink){
+        orderHistoryNavLink.addEventListener('click', function(ev){
+            ev.preventDefault();
+            showOrderHistory();
+        });
+    }
+
+    // 履歴画面の戻るボタン
+    if (orderHistoryBackButton){
+        orderHistoryBackButton.addEventListener('click', function(){
+            hideOrderHistory();
+            // ハッシュを戻して履歴API整合も取る
+            if (location.hash === '#order-history'){
+                try { history.back(); } catch(e){}
+            }
+        });
+    }
+
+    // ブラウザバック/進む対応
+    window.addEventListener('popstate', function(){
+        if (location.hash === '#order-history'){
+            // 直接戻ってきたときも表示
+            showOrderHistory();
+        } else {
+            hideOrderHistory();
+        }
+    });
+
+    // 直リンクで #order-history の場合に表示
+    if (location.hash === '#order-history'){
+        showOrderHistory();
+    }
+
+    // ---- 注文確定時に履歴へ追記 ----
+    const confirmOrderButton = document.getElementById('confirm-order-button');
+    if (confirmOrderButton){
+        confirmOrderButton.addEventListener('click', function(){
+            // 現在の確認画面のサマリーから値を取得
+            const getText = (id) => {
+                const el = document.getElementById(id);
+                return el ? (el.textContent || '').trim() : '';
+            };
+            const historyItem = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                product: getText('summary-product'),
+                school: getText('summary-school'),
+                grade: getText('summary-grade'),
+                teacher: getText('summary-teacher'),
+                quantity: getText('summary-quantity'),
+                classes: getText('summary-classes'),
+                remarks: getText('summary-remarks')
+            };
+            const list = getOrderHistory();
+            list.push(historyItem);
+            setOrderHistory(list);
+        });
+    }
+
+    // HTMLエスケープ
+    function escapeHtml(str){
+        return String(str)
+            .replace(/&/g,'&amp;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;')
+            .replace(/'/g,'&#39;');
+    }
+})();
+</script>
+
 </body>
 </html>
