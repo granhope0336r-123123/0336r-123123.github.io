@@ -808,6 +808,72 @@
         const winterDrillButton = document.getElementById('winter-drill-button');
         const homeButtonCategory = document.getElementById('home-button-category');
 const bunkeidoButtons = document.querySelectorAll('.bunkeido-button');
+const productSelect = document.getElementById('product-select');
+let currentPublisher = '';
+
+const productOptionsByPublisher = {
+    '文溪堂': [
+        { value: 'bunkeido-perfect-12', text: '(文溪堂)これで完ぺき！パーフェクト　1・2年　470円' },
+        { value: 'bunkeido-perfect-12-extra', text: '(文溪堂)これで完ぺき！パーフェクト　1・2年（別冊付き）　530円' },
+        { value: 'bunkeido-perfect-34', text: '(文溪堂)これで完ぺき！パーフェクト　3・4年　470円' },
+        { value: 'bunkeido-perfect-34-extra', text: '(文溪堂)これで完ぺき！パーフェクト　3・4年（別冊付き）　530円' },
+        { value: 'bunkeido-perfect-56', text: '(文溪堂)これで完ぺき！パーフェクト　5・6年　470円' },
+        { value: 'bunkeido-perfect-56-extra', text: '(文溪堂)これで完ぺき！パーフェクト　5・6年（別冊付き）　530円' },
+        { value: 'bunkeido-fuyunobinobi', text: '(文溪堂)冬のびのび　230円' },
+        { value: 'bunkeido-fuyunobinobi-extra', text: '(文溪堂)冬のびのび （別冊付き）　300円' },
+        { value: 'bunkeido-fuyuhakore', text: '(文溪堂)冬はこれだけ　220円' },
+        { value: 'bunkeido-fuyuhakore-extra', text: '(文溪堂)冬はこれだけ（別冊付き）　220円' },
+        { value: 'bunkeido-go-2', text: '(文溪堂)2年生へGO！　230円' },
+        { value: 'bunkeido-go-3', text: '(文溪堂)3年生へGO！　230円' },
+        { value: 'bunkeido-go-4', text: '(文溪堂)4年生へGO！　230円' },
+        { value: 'bunkeido-go-5', text: '(文溪堂)5年生へGO！　230円' },
+        { value: 'bunkeido-go-6', text: '(文溪堂)6年生へGO！　230円' },
+    ],
+    '日本標準': [
+        { value: 'nihonhyo-winter-skill', text: '(日本標準)冬のスキルアップ　200円' },
+        { value: 'nihonhyo-winter-skill-test', text: '(日本標準)冬のスキルアップ　確認テスト付き　220円' },
+    ],
+    '光村教育図書': [
+        { value: 'mitsumura-akaneko-winter-skill', text: '(光村教育図書)あかねこ冬スキル　320円' },
+    ],
+    '青葉出版': [
+        { value: 'aoba-winter-try', text: '(青葉出版）冬のトライ　230円' },
+        { value: 'aoba-winter-try-extra', text: '(青葉出版）冬のトライ　別冊付き　260円' },
+    ],
+};
+
+const productIdPrefixMap = {
+    'bunkeido-': '文溪堂',
+    'nihonhyo-': '日本標準',
+    'mitsumura-': '光村教育図書',
+    'aoba-': '青葉出版',
+};
+
+function setProductOptions(publisherName) {
+    if (!productSelect) return;
+    const placeholderOption = document.createElement('option');
+    placeholderOption.value = '';
+    placeholderOption.textContent = '-- 商品を選択してください --';
+
+    productSelect.innerHTML = '';
+    productSelect.appendChild(placeholderOption);
+
+    const options = productOptionsByPublisher[publisherName] || [];
+    options.forEach(({ value, text }) => {
+        const optionEl = document.createElement('option');
+        optionEl.value = value;
+        optionEl.textContent = text;
+        productSelect.appendChild(optionEl);
+    });
+    currentPublisher = publisherName;
+}
+
+function getPublisherByProductId(productId) {
+    if (!productId) return null;
+    return Object.entries(productIdPrefixMap).find(([prefix]) => productId.startsWith(prefix))?.[1] || null;
+}
+
+setProductOptions('文溪堂');
 
         // ▼ 追加: 文溪堂は教科選択をスキップして商品選択へ直行
         if (typeof bunkeidoButtons !== 'undefined' && bunkeidoButtons) {
@@ -816,6 +882,12 @@ const bunkeidoButtons = document.querySelectorAll('.bunkeido-button');
                     try {
                         isNavigatingBack = false; // フラグをリセット
                         if (e) e.preventDefault();
+                        const publisherName = btn.textContent.trim();
+                        if (productOptionsByPublisher[publisherName]) {
+                            setProductOptions(publisherName);
+                        } else if (currentPublisher !== '文溪堂') {
+                            setProductOptions('文溪堂');
+                        }
                         // 隠す: 出版社選択 各種 / 教科選択
                         if (publisherSelectionScreen) publisherSelectionScreen.classList.add('hidden');
                         if (publisherTopBottomSelectionScreen) publisherTopBottomSelectionScreen.classList.add('hidden');
@@ -1406,6 +1478,16 @@ confirmOrderButton.addEventListener('click', () => {
         function populateFormForEdit(item, screenId) {
             const suffix = screenId.includes('crafterio') ? '-crafterio' : '';
             resetProductForm();
+            if (!suffix) {
+                let publisher = getPublisherByProductId(item.productId);
+                if (!publisher) {
+                    if (item.productName.includes('文溪堂')) publisher = '文溪堂';
+                    else if (item.productName.includes('日本標準')) publisher = '日本標準';
+                    else if (item.productName.includes('光村教育図書')) publisher = '光村教育図書';
+                    else if (item.productName.includes('青葉出版')) publisher = '青葉出版';
+                }
+                setProductOptions(publisher || '文溪堂');
+            }
             document.getElementById(`product-select${suffix}`).value = item.productId;
             document.getElementById(`school-name${suffix}`).value = item.schoolName;
             document.getElementById(`grade${suffix}`).value = item.grade;
