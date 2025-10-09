@@ -969,6 +969,33 @@ setProductOptions('文溪堂');
         const modalCancelDelete = document.getElementById('modal-cancel-delete');
         const backToMenuFromCompleteButton = document.getElementById('back-to-menu-from-complete-button');
 
+        const appScreens = Array.from(document.querySelectorAll('div[id$="-screen"]'));
+
+        function navigateToMainMenu() {
+            appScreens.forEach(screen => {
+                if (screen.id === 'main-screen') {
+                    screen.classList.remove('hidden');
+                } else {
+                    screen.classList.add('hidden');
+                }
+            });
+            if (deleteConfirmationModal) {
+                deleteConfirmationModal.classList.add('hidden');
+            }
+            if (location.hash === '#order-history') {
+                try {
+                    history.replaceState({}, '', location.pathname + location.search);
+                } catch (e) { /* no-op */ }
+            }
+        }
+
+        document.querySelectorAll('div[id$="-screen"] header h1').forEach(title => {
+            title.classList.add('cursor-pointer');
+            title.addEventListener('click', () => {
+                navigateToMainMenu();
+            });
+        });
+
 
         // --- 画面遷移のイベントリスナー ---
 
@@ -1711,6 +1738,13 @@ function sendOrderEmail(orderDataArray) {
     if (location.hash === '#order-history'){
         showOrderHistory();
     }
+
+    window.addEventListener('pageshow', (event) => {
+        renderOrderHistory();
+        if (location.hash === '#order-history' && event && event.persisted){
+            showOrderHistory();
+        }
+    });
 
     // ---- 注文確定時に履歴へ追記 ----
     const confirmOrderButton = document.getElementById('confirm-order-button');
