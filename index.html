@@ -764,6 +764,7 @@
         let previousPublisherScreen = null; // 教科選択画面から戻るための変数
         let previousManufacturerScreen = null; // クラフテリオ画面から戻るための変数
         let isNavigatingBack = false; // 戻る操作の追跡用フラグ
+        let currentOrderId = null; // 確認画面で処理中の注文ID
 
         // 画面要素の取得
         const mainScreen = document.getElementById('main-screen');
@@ -1233,10 +1234,12 @@ setProductOptions('文溪堂');
         continueOrderingButton.addEventListener('click', () => {
             cartConfirmationScreen.classList.add('hidden');
             mainScreen.classList.remove('hidden');
+            currentOrderId = null;
         });
         backToMenuButton.addEventListener('click', () => {
             cartConfirmationScreen.classList.add('hidden');
             mainScreen.classList.remove('hidden');
+            currentOrderId = null;
         });
         
         // カート一覧画面の「戻る」
@@ -1257,56 +1260,86 @@ setProductOptions('文溪堂');
         // 「カートに追加」または「注文を更新」ボタンの処理（文溪堂・国語）
         addToCartButton.addEventListener('click', () => {
             const editingId = document.getElementById('editing-cart-item-id').value;
-            if (validateProductForm('product-selection-screen')) {
-                const orderData = getFormData('product-selection-screen');
-                if (editingId) {
-                    const index = cart.findIndex(item => item.id === editingId);
-                    if (index !== -1) cart[index] = { ...cart[index], ...orderData };
-                } else {
-                    orderData.id = `cart_${new Date().getTime()}`;
-                    orderData.addedDate = new Date();
-                    cart.push(orderData);
+            if (!validateProductForm('product-selection-screen')) return;
+
+            const formData = getFormData('product-selection-screen');
+            let itemForSummary = null;
+
+            if (editingId) {
+                const index = cart.findIndex(item => item.id === editingId);
+                if (index !== -1) {
+                    const updatedItem = { ...cart[index], ...formData };
+                    cart[index] = updatedItem;
+                    itemForSummary = updatedItem;
                 }
-                showOrderSummary(orderData);
-                productSelectionScreen.classList.add('hidden');
-                cartConfirmationScreen.classList.remove('hidden');
+            } else {
+                itemForSummary = {
+                    ...formData,
+                    id: `cart_${Date.now()}`,
+                    addedDate: new Date(),
+                };
+                cart.push(itemForSummary);
             }
+
+            if (!itemForSummary) return;
+
+            showOrderSummary(itemForSummary);
+            productSelectionScreen.classList.add('hidden');
+            cartConfirmationScreen.classList.remove('hidden');
         });
 
         // 「カートに追加」ボタンの処理（クラフテリオ）
         addToCartButtonCrafterio.addEventListener('click', () => {
-            if (validateProductForm('crafterio-selection-screen')) {
-                const orderData = getFormData('crafterio-selection-screen');
-                orderData.id = `cart_${new Date().getTime()}`;
-                orderData.addedDate = new Date();
-                cart.push(orderData);
-                showOrderSummary(orderData);
-                crafterioSelectionScreen.classList.add('hidden');
-                cartConfirmationScreen.classList.remove('hidden');
-            }
+            if (!validateProductForm('crafterio-selection-screen')) return;
+
+            const formData = getFormData('crafterio-selection-screen');
+            const newItem = {
+                ...formData,
+                id: `cart_${Date.now()}`,
+                addedDate: new Date(),
+            };
+
+            cart.push(newItem);
+            showOrderSummary(newItem);
+            crafterioSelectionScreen.classList.add('hidden');
+            cartConfirmationScreen.classList.remove('hidden');
         });
 
 
         // 単一注文のデータ出力
         exportSingleOrderButton.addEventListener('click', () => {
-            if (cart.length > 0) {
-                exportToCSV([cart[cart.length - 1]]);
+            if (!currentOrderId) return;
+            const targetItem = cart.find(item => item.id === currentOrderId);
+            if (targetItem) {
+                exportToCSV([targetItem]);
             }
         });
 
         // 「注文を確定する」ボタン（カート確認画面）
         
 confirmOrderButton.addEventListener('click', () => {
-    if (cart.length > 0) {
-        const lastItem = cart[cart.length - 1];
-        if (window.noteStickerAttachment && window.noteStickerAttachment.forCartItemId === lastItem.id) {
-            sendOrderEmailWithAttachment([lastItem], window.noteStickerAttachment.file);
+    if (!currentOrderId) return;
+
+    const targetItem = cart.find(item => item.id === currentOrderId);
+    if (!targetItem) return;
+
+    const attachmentInfo = window.noteStickerAttachment;
+    const hasAttachment = attachmentInfo && attachmentInfo.forCartItemId === currentOrderId;
+
+    const handleSuccess = () => {
+        cart = cart.filter(item => item.id !== currentOrderId);
+        if (hasAttachment) {
             window.noteStickerAttachment = null;
-        } else {
-            sendOrderEmail([lastItem]);
         }
-        // 注文した商品をカートから削除
-        cart.pop();
+        selectedCartItemIds = selectedCartItemIds.filter(id => id !== currentOrderId);
+        updateCartActionsVisibility();
+        currentOrderId = null;
+    };
+
+    if (hasAttachment) {
+        sendOrderEmailWithAttachment([targetItem], attachmentInfo.file, handleSuccess);
+    } else {
+        sendOrderEmail([targetItem], handleSuccess);
     }
 });
 
@@ -1333,10 +1366,15 @@ confirmOrderButton.addEventListener('click', () => {
         orderSelectedButton.addEventListener('click', () => {
             const selectedItems = cart.filter(item => selectedCartItemIds.includes(item.id));
             if (selectedItems.length > 0) {
-                sendOrderEmail(selectedItems);
-                // 注文した商品をカートから削除
-                cart = cart.filter(item => !selectedCartItemIds.includes(item.id));
-                selectedCartItemIds = [];
+                const idsToRemove = new Set(selectedCartItemIds);
+                sendOrderEmail(selectedItems, () => {
+                    cart = cart.filter(item => !idsToRemove.has(item.id));
+                    selectedCartItemIds = [];
+                    if (idsToRemove.has(currentOrderId)) {
+                        currentOrderId = null;
+                    }
+                    renderCartList();
+                });
             }
         });
         
@@ -1432,12 +1470,14 @@ confirmOrderButton.addEventListener('click', () => {
 
         // 注文内容確認を表示
         function showOrderSummary(data) {
-            const classQtys = Object.entries(data.classQuantities).map(([key, value]) => `${key}組: ${value}個`);
+            currentOrderId = data.id || null;
+            const classEntries = data.classQuantities ? Object.entries(data.classQuantities) : [];
+            const classQtys = classEntries.map(([key, value]) => `${key}組: ${value}個`);
             document.getElementById('summary-product').textContent = data.productName;
             document.getElementById('summary-school').textContent = data.schoolName;
             document.getElementById('summary-grade').textContent = data.grade;
             document.getElementById('summary-teacher').textContent = data.teacherName;
-            document.getElementById('summary-quantity').textContent = data.totalQuantity + '個';
+            document.getElementById('summary-quantity').textContent = (data.totalQuantity || 0) + '個';
             document.getElementById('summary-classes').textContent = classQtys.length > 0 ? classQtys.join(', ') : 'なし';
             document.getElementById('summary-remarks').textContent = data.remarks || 'なし';
         }
@@ -1576,17 +1616,17 @@ confirmOrderButton.addEventListener('click', () => {
         }
 
         // 注文内容をメールで送信する関数
-function sendOrderEmail(orderDataArray) {
+function sendOrderEmail(orderDataArray, onSuccess) {
     let emailBody = "新規注文がありました。\n\n--- 注文内容 ---\n\n";
 
     orderDataArray.forEach((item, index) => {
-        const classQtys = Object.entries(item.classQuantities).map(([key, value]) => `  ${key}組: ${value}個`).join('\n');
+        const classQtys = Object.entries(item.classQuantities || {}).map(([key, value]) => `  ${key}組: ${value}個`).join('\n');
         emailBody += `[${index + 1}件目]\n`;
         emailBody += `商品名: ${item.productName}\n`;
         emailBody += `学校名: ${item.schoolName}\n`;
         emailBody += `学年: ${item.grade}\n`;
         emailBody += `ご担当者氏名: ${item.teacherName}\n`;
-        emailBody += `合計個数: ${item.totalQuantity}個\n`;
+        emailBody += `合計個数: ${item.totalQuantity || ''}個\n`;
         emailBody += `組ごとの内訳:\n${classQtys || '  なし'}\n`;
         emailBody += `備考: ${item.remarks || 'なし'}\n\n`;
     });
@@ -1607,6 +1647,9 @@ function sendOrderEmail(orderDataArray) {
         cartConfirmationScreen.classList.add('hidden');
         cartListScreen.classList.add('hidden');
         orderCompleteScreen.classList.remove('hidden');
+        if (typeof onSuccess === 'function') {
+            onSuccess();
+        }
     })
     .catch(error => {
         // 失敗したらエラーを表示
@@ -1884,7 +1927,7 @@ function sendOrderEmail(orderDataArray) {
     }
 
     // 画像付き送信用関数
-    window.sendOrderEmailWithAttachment = function(orderDataArray, file){
+    window.sendOrderEmailWithAttachment = function(orderDataArray, file, onSuccess){
         let emailBody = "新規注文がありました。（画像添付あり）\n\n--- 注文内容 ---\n\n";
         orderDataArray.forEach((item, index) => {
             const classQtys = Object.entries(item.classQuantities || {}).map(([k, v]) => `  ${k}組: ${v}個`).join('\n');
@@ -1914,6 +1957,9 @@ function sendOrderEmail(orderDataArray) {
             document.getElementById('cart-confirmation-screen').classList.add('hidden');
             document.getElementById('cart-list-screen').classList.add('hidden');
             document.getElementById('order-complete-screen').classList.remove('hidden');
+            if (typeof onSuccess === 'function') {
+                onSuccess();
+            }
         })
         .catch(err => {
             console.error('Form submission error:', err);
